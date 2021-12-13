@@ -55,4 +55,4 @@ spectral
 18
 visdom lightgbm keras gluoncv mxnet
 
-## RS Function API
+## 2. RS Function API
