@@ -23,18 +23,21 @@ class SCircle:
         :param params:
         :param createOption:
         """
+        # 1 wkt创建circle 方式
         if type(Pointparam) == str:
             self.circle = wkt.loads(Pointparam).buffer(length,resolution=circleResolution) #type: Polygon
 
+        # 2 python List create 方式
         elif type(Pointparam) == list:
             self.circle = Point(tuple(Pointparam)).buffer(length,resolution=circleResolution) #type: Polygon
+        # 3 python str 但是是 tuple 方式？
         elif type(Pointparam) == tuple:
             self.circle = Point(Pointparam).buffer(length,resolution=circleResolution) #type: Polygon
         else:
             print("未读懂输入参数!!!")
             raise ValueError
 
-    # 八等分圆
+    #  equalPart8 八等分圆
     def equalPartby8(self)->MultiPolygon:
         minX,minY,maxX,maxY = self.circle.bounds
         midX = (maxX + minX) / 2
@@ -52,6 +55,7 @@ class SCircle:
 
 
 # 计算a 和 b之间的坐标距离 其实就是计算直角三角形的第三边长度
+
 def pointDis(a1,a2,b1,b2):
     c = abs(a1-b1)
     d = abs(a2-b2)
@@ -95,9 +99,7 @@ if __name__ == '__main__':
                 # listTemp = [int(i) for i in listTemp]
                 # samplePoints.append(listTemp)
 
-
-
-
-
-
     plt.show()
+    
+    #savefig()
+

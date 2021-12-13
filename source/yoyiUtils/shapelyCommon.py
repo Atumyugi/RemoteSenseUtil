@@ -228,8 +228,11 @@ def samplePolygonByRandomOld2(polyA:Polygon,segNetNum=16):
     ySize = yMax - yMin
     xMid = xMin + xSize/2.0
     yMid = yMin + ySize/2.0
+    # xMid yMid 代表该面矢量的外接矩形几何中心
+    # 以几何中心为分界线，进行四次随机采样
     samplePoints = []
     while len(samplePoints) < segNetNum:
+        # 第一个采样
         xLeftDown = random.uniform(xMin,xMid)
         yLeftDown = random.uniform(yMin,yMid)
         ranPoint1 = Point(xLeftDown,yLeftDown)
@@ -265,29 +268,34 @@ def samplePolygonByRandomNew(polyA:Polygon,segNetNum=16):
     segXX = segNetNum // 3  # 多加点希望一次性过,这样就少了一倍的循环次数
     while len(samplePoints) < segNetNum:
         #np.random.uniform(xMin,xMid,segXX).tolist()
+       
         xLeft = np.random.uniform(xMin,xMid,segXX).tolist()
         yDown = np.random.uniform(yMin,yMid,segXX).tolist()
         xRight = np.random.uniform(xMid,xMax,segXX).tolist()
         yUp = np.random.uniform(yMid,yMax,segXX).tolist()
 
+         # 第一次采样
         svLD = sv.contains(polyA,xLeft,yDown)
         xld = list(compress(xLeft,svLD))
         yld = list(compress(yDown,svLD))
         for i in range(len(xld)):
             samplePoints.append([xld[i],yld[i]])
 
+        # 第二次采样
         svRD = sv.contains(polyA, xRight, yDown)
         xrd = list(compress(xRight, svRD))
         yrd = list(compress(yDown, svRD))
         for i in range(len(xrd)):
             samplePoints.append([xrd[i], yrd[i]])
 
+        # 第三次采样 
         svLU = sv.contains(polyA, xLeft, yUp)
         xlu = list(compress(xLeft, svLU))
         ylu = list(compress(yUp, svLU))
         for i in range(len(xlu)):
             samplePoints.append([xlu[i], ylu[i]])
 
+        # 第四次采样
         svRU = sv.contains(polyA, xRight, yUp)
         xru = list(compress(xRight, svRU))
         yru = list(compress(yUp, svRU))
@@ -297,6 +305,7 @@ def samplePolygonByRandomNew(polyA:Polygon,segNetNum=16):
         segXX = segNetNum - len(samplePoints)
     return samplePoints
 
+# 随机暴力采样法
 def samplePolygonByRandom(polyA:Polygon,segNetNum=16):
     xMin, yMin, xMax, yMax = polyA.bounds
     samplePoints = []
